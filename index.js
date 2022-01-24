@@ -1,0 +1,1 @@
+export { UseQuery } from "./useapi";
