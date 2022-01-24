@@ -1,28 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import axios from "axios";
-const POST_API = "https://jsonplaceholder.typicode.com/posts";
+import { useQuery } from "react-query";
 
-export function UseQuery() {
-  const [posts, setPosts] = useState([]);
+const fetchUsers = async () => {
+  const res = await fetch("https://jsonplaceholder.typicode.com/users");
+  const data = res.json();
+  console.log(data);
+  return data;
+};
 
-  useEffect(() => {
-    axios.get(POST_API).then((response) => {
-      setPosts(response.data);
-    });
-  }, []);
+export function UseApi() {
+  const { data, status } = useQuery("users", fetchUsers);
 
   return (
-    <div className="App">
-      <div>
-        {posts.map((posts) => (
-          <div key={posts.id}>
-            userid={posts.userId}
-            id={posts.id}
-            title={posts.title}
-            body={posts.body}
-          </div>
-        ))}
-      </div>
+    <div>
+      {status === "success" && (
+        <div>
+          {data.map((user, index) => (
+            <p key={index}>{user.name}</p>
+          ))}
+          <p> status is :{status}</p>
+        </div>
+      )}
     </div>
   );
 }
